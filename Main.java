@@ -1,5 +1,11 @@
 import java.io.*;
 import java.util.*;
+import java.util.Hashtable;
+import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.util.Scanner;
+import java.io.FileReader;
+
 
 
 
@@ -10,6 +16,7 @@ public static void main(String[] args) {
    
 }
 
+//Converts CSV file to List of Hashtables which use Key Value pairs
 public static List<Hashtable<String, String>> convertCSV(String args){
     List<Hashtable<String, String>> lines = new ArrayList<Hashtable<String,String>>();
     try (BufferedReader br = new BufferedReader(new FileReader("data.csv"))) {
@@ -21,6 +28,8 @@ public static List<Hashtable<String, String>> convertCSV(String args){
         String line;
         while ((line = br.readLine()) != null) {
             String[] columns = line.split(DELIMITER);
+
+            //Create Key Value Pairs
             Hashtable<String, String> monsterDictionary = new Hashtable<>(); {
                 monsterDictionary.put("Name", columns[0]);
                 monsterDictionary.put("URL", columns[1]);
@@ -49,6 +58,7 @@ public static List<Hashtable<String, String>> convertCSV(String args){
 
 public static void searchForMonster(List<Hashtable<String, String>> monsterList){
 
+    //Creat Key Value Pairs for user input to List of Hashtables
     Hashtable<String, String> categories = new Hashtable<String, String>();
     categories.put("1", "Name");
     categories.put("2", "CR");
@@ -62,6 +72,7 @@ public static void searchForMonster(List<Hashtable<String, String>> monsterList)
         System.out.printf("Categories%n1. Name%n2. Challenge Rating%n3. Type%n4. Size%n5. Armor Class%n6. Health%n7. Alignment%n8. Exit%nWhat category would you like to search by?: %n");
         String categoryChoice = myObj.nextLine();  // Read user input
         
+        //Check User input for validity
         if(categoryChoice.equals("8")){
             System.out.println("Thank You for Your Time!");
         }
@@ -72,12 +83,15 @@ public static void searchForMonster(List<Hashtable<String, String>> monsterList)
         else{
             System.out.printf("Search in " + categories.get(categoryChoice) + ": ");
             String searchCriteria = myObj.nextLine();
-
+            
+            //Search for user input in List
             for(Hashtable<String,String> monster: monsterList){
                 if((monster.get(categories.get(categoryChoice))).equals(searchCriteria)){
+                    //Display Information
                     System.out.println(monster);
                 }
             }
+            //Recurr for continued prompting
             searchForMonster(monsterList);
         }
         
